@@ -1,0 +1,2 @@
+import openia
+openai.api_key ='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'
