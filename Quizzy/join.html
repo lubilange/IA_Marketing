@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejoindre un Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; padding-top: 50px; }
+        .join-box { background: white; padding: 20px; border-radius: 10px; display: inline-block; }
+        input { margin: 10px; padding: 5px; }
+        button { padding: 10px 20px; background: #6b5b95; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="join-box">
+        <h2>Rejoindre un Quiz</h2>
+        <input id="code" type="text" placeholder="Entrez le code (6 caractères)"><br>
+        <button onclick="joinQuiz()">Rejoindre</button>
+        <p id="message"></p>
+        <div id="nicknameBox" style="display: none;">
+            <input id="nickname" type="text" placeholder="Entrez votre pseudo"><br>
+            <button onclick="submitNickname()">Confirmer</button>
+        </div>
+    </div>
+
+    <script>
+        function joinQuiz() {
+            const code = document.getElementById('code').value.toUpperCase();
+            if (code === localStorage.getItem('quizCode')) {
+                document.getElementById('message').innerText = "Code valide !";
+                document.getElementById('nicknameBox').style.display = 'block';
+            } else {
+                document.getElementById('message').innerText = "Code invalide !";
+            }
+        }
+
+        function submitNickname() {
+            const nickname = document.getElementById('nickname').value;
+            if (nickname) {
+                localStorage.setItem('playerNickname', nickname);
+                window.location.href = 'play.html'; // Redirection vers la page de jeu
+            } else {
+                document.getElementById('message').innerText = "Entrez un pseudo !";
+            }
+        }
+    </script>
+</body>
+</html>

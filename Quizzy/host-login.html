@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion Host</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; padding-top: 50px; }
+        .login-box { background: white; padding: 20px; border-radius: 10px; display: inline-block; }
+        input { margin: 10px; padding: 5px; width: 200px; }
+        button { padding: 10px 20px; background: #ff6f61; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Connexion Host</h2>
+        <input id="username" type="text" placeholder="Nom d'utilisateur"><br>
+        <input id="password" type="password" placeholder="Mot de passe"><br>
+        <button onclick="login()">Se connecter</button>
+        <p id="error" style="color: red;"></p>
+    </div>
+
+    <script>
+        const hosts = { "admin1": "pass123", "admin2": "pass456" }; // Hosts prédéfinis
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (hosts[username] && hosts[username] === password) {
+                window.location.href = 'host.html';
+            } else {
+                document.getElementById('error').innerText = "Identifiants incorrects !";
+            }
+        }
+    </script>
+</body>
+</html>

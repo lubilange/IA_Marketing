@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jouer au Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; text-align: center; padding-top: 20px; }
+        .quiz-box { background: white; padding: 20px; border-radius: 10px; display: inline-block; }
+        button { padding: 10px 20px; background: #6b5b95; color: white; border: none; border-radius: 5px; margin: 5px; }
+        #timer { font-size: 20px; color: #221e1e; }
+        img { max-width: 300px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <div class="quiz-box">
+        <h2>Quiz en cours</h2>
+        <p id="welcome"></p>
+        <div id="questionBox" style="display: none;">
+            <p id="question"></p>
+            <img id="questionImage" style="display: none;">
+            <button id="btn0" onclick="answer(0)"></button>
+            <button id="btn1" onclick="answer(1)"></button>
+            <button id="btn2" onclick="answer(2)"></button>
+            <p id="timer">Temps restant : 30s</p>
+        </div>
+        <p id="score">Score : 0</p>
+        <button onclick="startQuiz()" id="startBtn">Démarrer le quiz</button>
+    </div>
+
+    <script>
+        let currentQuiz = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timer;
+
+        document.getElementById('welcome').innerText = `Bienvenue, ${localStorage.getItem('playerNickname')} !`;
+
+        function startQuiz() {
+            currentQuiz = JSON.parse(localStorage.getItem('quiz'));
+            if (currentQuiz && currentQuiz.length > 0) {
+                document.getElementById('startBtn').style.display = 'none';
+                showQuestion();
+            } else {
+                alert('Aucun quiz disponible !');
+            }
+        }
+
+        function showQuestion() {
+            if (currentQuestion < currentQuiz.length) {
+                document.getElementById('questionBox').style.display = 'block';
+                document.getElementById('question').innerText = currentQuiz[currentQuestion].question;
+                
+                const img = document.getElementById('questionImage');
+                if (currentQuiz[currentQuestion].image) {
+                    img.src = currentQuiz[currentQuestion].image;
+                    img.style.display = 'block';
+                } else {
+                    img.style.display = 'none';
+                }
+
+                document.getElementById('btn0').innerText = currentQuiz[currentQuestion].options[0];
+                document.getElementById('btn1').innerText = currentQuiz[currentQuestion].options[1];
+                document.getElementById('btn2').innerText = currentQuiz[currentQuestion].options[2];
+                startTimer();
+            } else {
+                alert('Quiz terminé ! Score final : ' + score);
+                document.getElementById('questionBox').style.display = 'none';
+            }
+        }
+
+        function startTimer() {
+            changeColor()
+            timeLeft = 30;
+            document.getElementById('timer').innerText = `Temps restant : ${timeLeft}s`;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = `Temps restant : ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    nextQuestion();
+                }
+            }, 1000);
+
+              
+        }
+
+        function changeColor(){
+            if (timeLeft<= 10) {
+
+                document.getElementById('timer').style.color = 'red'
+
+            }
+        }
+
+        function answer(choice) {
+            clearInterval(timer);
+            const correct = currentQuiz[currentQuestion].correct;
+            if (choice === correct) {
+                const bonus = Math.floor(timeLeft / 3); // Bonus basé sur le temps restant
+                score += 10 + bonus;
+                document.getElementById('score').innerText = `Score : ${score}`;
+            }
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+    </script>
+</body>
+</html>
