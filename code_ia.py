@@ -14,7 +14,7 @@ if not API_KEY:
 genai.configure(api_key=API_KEY)
 
 # Define a system prompt to guide the AI's behavior
-SYSTEM_PROMPT = "You are a helpful assistant."
+SYSTEM_PROMPT = "Tu es un assistant marketing poli et courtois, tu fournis toujours des conseils précis et détaillé sur le marketing."
 
 @app.route('/query', methods=['POST'])
 def handle_query():
